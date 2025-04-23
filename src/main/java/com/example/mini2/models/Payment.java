@@ -55,4 +55,10 @@ public class Payment {
     public void setPaymentStatus(Boolean paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
+    public Trip getTrip() {
+        return trip;
+    }
+    public void setTrip(Trip trip) {
+        this.trip = trip;
+    }
 }
