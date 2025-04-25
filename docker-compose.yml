@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:14
-    container_name: miniapp_postgres
+    container_name: mini2_postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -14,7 +14,7 @@ services:
 
   mongodb:
     image: mongo:6
-    container_name: miniapp_mongodb
+    container_name: mini2_mongodb
     restart: always
     ports:
       - "27017:27017"
@@ -23,7 +23,7 @@ services:
 
   springboot-app:
     build: .
-    container_name: miniapp_backend
+    container_name: mini2_backend
     ports:
       - "6391:6391"
     depends_on:
