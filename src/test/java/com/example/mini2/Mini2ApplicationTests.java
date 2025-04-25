@@ -52,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.*;
 				"destination VARCHAR(255) NOT NULL, " +
 				"trip_cost DOUBLE PRECISION NOT NULL, " +
 				"captain_id INT REFERENCES captains(id), " +
-				"customer_id INT REFERENCES customers(id)" + // optional, can add REFERENCES customers(id) if needed
+				"customer_id INT REFERENCES customers(id)" +  // optional, can add REFERENCES customers(id) if needed
 				");",
 
 		// Create payments table — FK to trips
@@ -127,7 +127,6 @@ class Mini2ApplicationTests {
 		// captainRepository.deleteAll();
 		// customerRepository.deleteAll();
 	}
-
 	public static Field findFieldIgnoreCase(Class<?> clazz, String fieldName) {
 		Field[] declaredFields = clazz.getDeclaredFields();
 		for (Field field : declaredFields) {
@@ -139,7 +138,7 @@ class Mini2ApplicationTests {
 	}
 
 	Field getID(String ClassPath) throws ClassNotFoundException, NoSuchFieldException {
-		Field ID = findFieldIgnoreCase(Class.forName(ClassPath), "id");
+		Field ID = findFieldIgnoreCase(Class.forName(ClassPath),"id");
 		ID.setAccessible(true);
 		return ID;
 	}
@@ -148,7 +147,6 @@ class Mini2ApplicationTests {
 	void contextLoads() {
 
 	}
-
 	@Test
 	public void testControllerAddCaptain() {
 		Captain newCaptain = new Captain("John Doe", "54321", 4.5);
@@ -156,8 +154,7 @@ class Mini2ApplicationTests {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Captain> request = new HttpEntity<>(newCaptain, headers);
 
-		ResponseEntity<Captain> response = restTemplate.postForEntity(BASE_URL_CAPTAIN + "/addCaptain", request,
-				Captain.class);
+		ResponseEntity<Captain> response = restTemplate.postForEntity(BASE_URL_CAPTAIN + "/addCaptain", request, Captain.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertEquals(newCaptain.getName(), response.getBody().getName());
@@ -170,13 +167,11 @@ class Mini2ApplicationTests {
 		assertNotNull(response.getBody());
 		assertTrue(response.getBody().isEmpty());
 	}
-
 	@Test
 	public void testControllerGetCaptainById() {
 		Captain captain = new Captain("Anna Taylor", "67890", 3.8);
 		captainService.addCaptain(captain); // Add to database for controller testing
-		ResponseEntity<Captain> response = restTemplate.getForEntity(BASE_URL_CAPTAIN + "/" + captain.getId(),
-				Captain.class);
+		ResponseEntity<Captain> response = restTemplate.getForEntity(BASE_URL_CAPTAIN + "/" + captain.getId(), Captain.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertEquals(captain.getName(), response.getBody().getName());
@@ -194,7 +189,8 @@ class Mini2ApplicationTests {
 		// Make the GET request to the endpoint
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_CAPTAIN + "/filterByRating?ratingThreshold=" + ratingThreshold,
-				List.class);
+				List.class
+		);
 
 		// Validate the response
 		assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -209,6 +205,7 @@ class Mini2ApplicationTests {
 		assertTrue(response.getBody().isEmpty());
 	}
 
+
 	@Test
 	public void testControllerAddCustomer() {
 		Customer newCustomer = new Customer("John Doe", "john@example.com", "1234567890");
@@ -216,8 +213,7 @@ class Mini2ApplicationTests {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Customer> request = new HttpEntity<>(newCustomer, headers);
 
-		ResponseEntity<Customer> response = restTemplate.postForEntity(BASE_URL_CUSTOMER + "/addCustomer", request,
-				Customer.class);
+		ResponseEntity<Customer> response = restTemplate.postForEntity(BASE_URL_CUSTOMER + "/addCustomer", request, Customer.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertEquals(newCustomer.getName(), response.getBody().getName());
@@ -235,8 +231,7 @@ class Mini2ApplicationTests {
 	public void testControllerGetCustomerById() {
 		Customer customer = new Customer("Anna Taylor", "anna@example.com", "5555555555");
 		customerService.addCustomer(customer); // Add to database for controller testing
-		ResponseEntity<Customer> response = restTemplate.getForEntity(BASE_URL_CUSTOMER + "/" + customer.getId(),
-				Customer.class);
+		ResponseEntity<Customer> response = restTemplate.getForEntity(BASE_URL_CUSTOMER + "/" + customer.getId(), Customer.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertEquals(customer.getName(), response.getBody().getName());
@@ -257,7 +252,8 @@ class Mini2ApplicationTests {
 				BASE_URL_CUSTOMER + "/update/" + customer.getId(),
 				HttpMethod.PUT,
 				request,
-				Customer.class);
+				Customer.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
@@ -273,7 +269,8 @@ class Mini2ApplicationTests {
 				BASE_URL_CUSTOMER + "/delete/" + customer.getId(),
 				HttpMethod.DELETE,
 				null,
-				String.class);
+				String.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
@@ -284,7 +281,8 @@ class Mini2ApplicationTests {
 				BASE_URL_CUSTOMER + "/delete/" + 1,
 				HttpMethod.DELETE,
 				null,
-				String.class);
+				String.class
+		);
 
 	}
 
@@ -296,7 +294,8 @@ class Mini2ApplicationTests {
 		String domain = "domain.com";
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_CUSTOMER + "/findByEmailDomain?domain=" + domain,
-				List.class);
+				List.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
@@ -310,7 +309,8 @@ class Mini2ApplicationTests {
 		String prefix = "555";
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_CUSTOMER + "/findByPhonePrefix?prefix=" + prefix,
-				List.class);
+				List.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
@@ -323,8 +323,7 @@ class Mini2ApplicationTests {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Payment> request = new HttpEntity<>(newPayment, headers);
 
-		ResponseEntity<Payment> response = restTemplate.postForEntity(BASE_URL_PAYMENT + "/addPayment", request,
-				Payment.class);
+		ResponseEntity<Payment> response = restTemplate.postForEntity(BASE_URL_PAYMENT + "/addPayment", request, Payment.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertEquals(newPayment.getAmount(), response.getBody().getAmount());
@@ -339,20 +338,18 @@ class Mini2ApplicationTests {
 	}
 
 	@Test
-	public void testControllerGetPaymentById()
-			throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
+	public void testControllerGetPaymentById() throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
 		Payment payment = new Payment(200.0, "Credit Card", true);
 		paymentService.addPayment(payment); // Add to database for controller testing
-		ResponseEntity<Payment> response = restTemplate
-				.getForEntity(BASE_URL_PAYMENT + "/" + ((Long) getID(PaymentPath).get(payment)), Payment.class);
+		ResponseEntity<Payment> response = restTemplate.getForEntity(BASE_URL_PAYMENT + "/" + ((Long) getID(PaymentPath).get(payment)), Payment.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertEquals(payment.getAmount(), response.getBody().getAmount());
 	}
 
+
 	@Test
-	public void testControllerUpdatePayment()
-			throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
+	public void testControllerUpdatePayment() throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
 		Payment payment = new Payment(250.0, "PayPal", true);
 		paymentService.addPayment(payment);
 
@@ -366,16 +363,17 @@ class Mini2ApplicationTests {
 				BASE_URL_PAYMENT + "/update/" + ((Long) getID(PaymentPath).get(payment)),
 				HttpMethod.PUT,
 				request,
-				Payment.class);
+				Payment.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertEquals(500.0, response.getBody().getAmount());
 	}
 
+
 	@Test
-	public void testControllerDeletePayment()
-			throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
+	public void testControllerDeletePayment() throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
 		Payment payment = new Payment(300.0, "Cash", false);
 		paymentService.addPayment(payment);
 
@@ -383,7 +381,8 @@ class Mini2ApplicationTests {
 				BASE_URL_PAYMENT + "/delete/" + ((Long) getID(PaymentPath).get(payment)),
 				HttpMethod.DELETE,
 				null,
-				String.class);
+				String.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
@@ -394,7 +393,8 @@ class Mini2ApplicationTests {
 				BASE_URL_PAYMENT + "/delete/" + 1,
 				HttpMethod.DELETE,
 				null,
-				String.class);
+				String.class
+		);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
@@ -405,7 +405,8 @@ class Mini2ApplicationTests {
 
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_PAYMENT + "/findByAmountThreshold?threshold=300.0",
-				List.class);
+				List.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
@@ -419,7 +420,8 @@ class Mini2ApplicationTests {
 
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_PAYMENT + "/findByAmountThreshold?threshold=150.0",
-				List.class);
+				List.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
@@ -431,7 +433,8 @@ class Mini2ApplicationTests {
 		Captain captain = captainService.addCaptain(new Captain("Test Captain 2", "LC456", 4.2));
 		ResponseEntity<Captain> response = restTemplate.getForEntity(
 				BASE_URL_CAPTAIN + "/filterByLicenseNumber?licenseNumber=LC456",
-				Captain.class);
+				Captain.class
+		);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertEquals("Test Captain 2", response.getBody().getName());
@@ -441,9 +444,9 @@ class Mini2ApplicationTests {
 	public void testControllerGetCaptainByLicenseNumberNotFound() {
 		ResponseEntity<Captain> response = restTemplate.getForEntity(
 				BASE_URL_CAPTAIN + "/filterByLicenseNumber?licenseNumber=NONEXISTENT",
-				Captain.class);
-		assertEquals(HttpStatus.OK, response.getStatusCode()); // Or potentially HttpStatus.NOT_FOUND depending on your
-																// controller logic
+				Captain.class
+		);
+		assertEquals(HttpStatus.OK, response.getStatusCode()); // Or potentially HttpStatus.NOT_FOUND depending on your controller logic
 		assertNull(response.getBody()); // Or handle the 404 case appropriately
 	}
 
@@ -451,7 +454,8 @@ class Mini2ApplicationTests {
 	public void testControllerFindRatingsByEntityNotFound() {
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_RATING + "/findByEntity?entityId=999&entityType=captain",
-				List.class);
+				List.class
+		);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertTrue(response.getBody().isEmpty());
@@ -462,7 +466,8 @@ class Mini2ApplicationTests {
 		ratingService.addRating(new Rating(7L, "customer", 2, "Bad.", LocalDateTime.now()));
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_RATING + "/findAboveScore?minScore=5",
-				List.class);
+				List.class
+		);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertTrue(response.getBody().isEmpty());
@@ -472,9 +477,9 @@ class Mini2ApplicationTests {
 	public void testControllerFindTripsWithinDateRangeNoResults() {
 		LocalDateTime now = LocalDateTime.now();
 		ResponseEntity<List> response = restTemplate.getForEntity(
-				BASE_URL_TRIP + "/findByDateRange?startDate=" + now.plusDays(7).toString() + "&endDate="
-						+ now.plusDays(8).toString(),
-				List.class);
+				BASE_URL_TRIP + "/findByDateRange?startDate=" + now.plusDays(7).toString() + "&endDate=" + now.plusDays(8).toString(),
+				List.class
+		);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertTrue(response.getBody().isEmpty());
@@ -484,7 +489,8 @@ class Mini2ApplicationTests {
 	public void testControllerFindTripsByCaptainIdNotFound() {
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_TRIP + "/findByCaptainId?captainId=999",
-				List.class);
+				List.class
+		);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertTrue(response.getBody().isEmpty());
@@ -496,7 +502,8 @@ class Mini2ApplicationTests {
 				BASE_URL_TRIP + "/delete/" + 1,
 				HttpMethod.DELETE,
 				null,
-				String.class);
+				String.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
@@ -508,16 +515,14 @@ class Mini2ApplicationTests {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Rating> request = new HttpEntity<>(newRating, headers);
 
-		ResponseEntity<Rating> response = restTemplate.postForEntity(BASE_URL_RATING + "/addRating", request,
-				Rating.class);
+		ResponseEntity<Rating> response = restTemplate.postForEntity(BASE_URL_RATING + "/addRating", request, Rating.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertEquals(newRating.getScore(), response.getBody().getScore());
 	}
 
 	@Test
-	public void testControllerUpdateRating()
-			throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
+	public void testControllerUpdateRating() throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
 		Rating rating = new Rating(2L, "customer", 4, "Good service.", LocalDateTime.now());
 		ratingService.addRating(rating);
 
@@ -531,7 +536,8 @@ class Mini2ApplicationTests {
 				BASE_URL_RATING + "/update/" + (getID(RatingPath).get(rating)),
 				HttpMethod.PUT,
 				request,
-				Rating.class);
+				Rating.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
@@ -539,8 +545,7 @@ class Mini2ApplicationTests {
 	}
 
 	@Test
-	public void testControllerDeleteRating()
-			throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
+	public void testControllerDeleteRating() throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
 		Rating rating = new Rating(3L, "captain", 3, "Average captain.", LocalDateTime.now());
 		ratingService.addRating(rating);
 
@@ -548,7 +553,8 @@ class Mini2ApplicationTests {
 				BASE_URL_RATING + "/delete/" + getID(RatingPath).get(rating),
 				HttpMethod.DELETE,
 				null,
-				String.class);
+				String.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
@@ -562,7 +568,8 @@ class Mini2ApplicationTests {
 
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_RATING + "/findByEntity?entityId=4&entityType=trip",
-				List.class);
+				List.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
@@ -572,9 +579,10 @@ class Mini2ApplicationTests {
 	public void testControllerFindRatingsByNonExistingEntity() {
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_RATING + "/findByEntity?entityId=4&entityType=trip",
-				List.class);
+				List.class
+		);
 
-		assertEquals(response.getBody().size(), 0);
+		assertEquals(response.getBody().size(),0);
 	}
 
 	@Test
@@ -586,7 +594,8 @@ class Mini2ApplicationTests {
 
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_RATING + "/findAboveScore?minScore=4",
-				List.class);
+				List.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
@@ -595,8 +604,7 @@ class Mini2ApplicationTests {
 	@Test
 	public void testControllerGetCaptainsByRatingNoResults() {
 		captainService.addCaptain(new Captain("Low Rating", "LR789", 2.0));
-		ResponseEntity<List> response = restTemplate
-				.getForEntity(BASE_URL_CAPTAIN + "/filterByRating?ratingThreshold=4.0", List.class);
+		ResponseEntity<List> response = restTemplate.getForEntity(BASE_URL_CAPTAIN + "/filterByRating?ratingThreshold=4.0", List.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 		assertTrue(((List<?>) response.getBody()).isEmpty());
@@ -640,7 +648,8 @@ class Mini2ApplicationTests {
 				BASE_URL_TRIP + "/update/" + trip.getId(),
 				HttpMethod.PUT,
 				request,
-				Trip.class);
+				Trip.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
@@ -656,7 +665,8 @@ class Mini2ApplicationTests {
 				BASE_URL_TRIP + "/delete/" + trip.getId(),
 				HttpMethod.DELETE,
 				null,
-				String.class);
+				String.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
@@ -671,11 +681,13 @@ class Mini2ApplicationTests {
 
 		ResponseEntity<List> response = restTemplate.getForEntity(
 				BASE_URL_TRIP + "/findByDateRange?startDate=" + startDate + "&endDate=" + endDate,
-				List.class);
+				List.class
+		);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
 	}
+
 
 	@Test
 	public void testServiceAddCaptain() {
@@ -707,7 +719,7 @@ class Mini2ApplicationTests {
 		captainService.addCaptain(captain2);
 		List<Captain> captains = captainService.getAllCaptains();
 		assertNotNull(captains);
-		assertTrue(captains.size() == 2);
+		assertTrue(captains.size()==2);
 	}
 
 	@Test
@@ -763,7 +775,7 @@ class Mini2ApplicationTests {
 		customerService.addCustomer(customer2);
 		List<Customer> customers = customerService.getAllCustomers();
 		assertNotNull(customers);
-		assertTrue(customers.size() == 2);
+		assertTrue(customers.size()==2);
 	}
 
 }

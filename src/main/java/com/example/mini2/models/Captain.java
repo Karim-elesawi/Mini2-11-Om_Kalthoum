@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "captains")
 public class Captain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +25,12 @@ public class Captain {
     }
     public Captain(Long id, String name, String licenseNumber, Double avgRatingScore) {
         this.id = id;
+        this.name = name;
+        this.licenseNumber = licenseNumber;
+        this.avgRatingScore = avgRatingScore;
+    }
+
+    public Captain(String name, String licenseNumber, Double avgRatingScore) {
         this.name = name;
         this.licenseNumber = licenseNumber;
         this.avgRatingScore = avgRatingScore;

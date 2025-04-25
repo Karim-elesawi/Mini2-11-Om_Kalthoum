@@ -1,46 +1,36 @@
+version: '3.8'
+
 services:
+
   postgres:
-    image: postgres:14
+    image: postgres
     container_name: mini2_postgres
-    restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: Karim_52_6391
+      POSTGRES_DB: mini2
+      POSTGRES_USER: mini2
+      POSTGRES_PASSWORD: mini2
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
-  mongodb:
-    image: mongo:6
-    container_name: mini2_mongodb
-    restart: always
+  mongo:
+    image: mongo
+    container_name: mini2_mongo
     ports:
       - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
+    restart: unless-stopped
 
-  springboot-app:
+  mini2:
     build: .
     container_name: mini2_backend
     ports:
-      - "6391:6391"
+      - "8080:8080"
     depends_on:
       - postgres
-      - mongodb
+      - mongo
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/Karim_52_6391
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/ridesharing
-    networks:
-      - backend
-
-networks:
-  backend:
-    driver: bridge
-
-volumes:
-  postgres_data:
-  mongo_data:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mini2
+      SPRING_DATASOURCE_USERNAME: mini2
+      SPRING_DATASOURCE_PASSWORD: mini2
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/mini2_mongo
+    restart: unless-stopped

@@ -1,10 +1,9 @@
-FROM eclipse-temurin:23-jdk-alpine
+FROM openjdk:25-ea-4-jdk-oraclelinux9
 
 WORKDIR /app
 
-# Copy Maven build output to container
 COPY target/*.jar app.jar
 
-EXPOSE 6391
+EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
